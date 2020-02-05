@@ -1,3 +1,4 @@
 discord/
 .vscode/
 .env
+configs/p_users.txt
