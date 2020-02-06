@@ -23,10 +23,10 @@ async def on_message(message):
     if message.content[0:3].lower() != "trz":
         return
     
-    command = parse_msg(message.content)
+    command = parse_msg(message.content.lower())
 
     if message.author.id == int(os.getenv('ADMIN')):
-        if message.content.lower() == "trz shut":
+        if command[0] == "shut":
             cfg.save_p_users()
             await message.channel.send("Shutting down :(")
             await client.close()

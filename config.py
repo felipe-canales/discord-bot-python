@@ -14,15 +14,15 @@ class Config:
 
     def add_p_user(self, id):
         if not id in self.pu:
-            self.pu.append(id)
+            self.pu.append(str(id))
             return True
         return False
 
     def remove_p_user(self, id):
         if id in self.pu:
-            self.pu.remove(id)
+            self.pu.remove(str(id))
             return True
         return False
 
     def check_p_user(self, id):
-        return id in self.pu
+        return str(id) in self.pu
