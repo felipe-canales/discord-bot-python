@@ -8,6 +8,7 @@ from config import load_p_users
 
 load_dotenv()
 token = os.getenv('DISCORD_TOKEN')
+cfg = Config()
 
 client = discord.Client()
 
@@ -16,8 +17,6 @@ client = discord.Client()
 async def on_ready():
     global p_users
     print(f'{client.user} has connected to Discord!')
-    print("Loading p-users...")
-    p_users = load_p_users()
 
 
 @client.event
@@ -26,13 +25,13 @@ async def on_message(message):
         return
     
     command = message.content.split(' ')
-    if str(message.author) == os.getenv('ADMIN'):
-        com.admin_command(command)
+    if message.author.id == os.getenv('ADMIN'):
+        com.admin_command(message, command, config)
 
     elif str(message.author) in p_users:
-        com.p_user_command(command)
+        com.p_user_command(message, command)
 
     else:
-        com.user_command(command)
+        com.user_command(message, command)
 
 client.run(token)
