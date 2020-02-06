@@ -1,4 +1,5 @@
 discord/
 .vscode/
+__pycache__
 .env
 configs/p_users.txt

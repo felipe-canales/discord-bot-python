@@ -3,19 +3,17 @@ import os
 import discord
 from dotenv import load_dotenv
 
-import commands as com
-from config import load_p_users
+from commands import admin_command, p_user_command, user_command
+from config import Config
 
 load_dotenv()
 token = os.getenv('DISCORD_TOKEN')
-cfg = Config()
-
 client = discord.Client()
+cfg = Config(client)
 
 
 @client.event
 async def on_ready():
-    global p_users
     print(f'{client.user} has connected to Discord!')
 
 
@@ -24,14 +22,20 @@ async def on_message(message):
     if message.content[0:3].lower() != "trz":
         return
     
-    command = message.content.split(' ')
-    if message.author.id == os.getenv('ADMIN'):
-        com.admin_command(message, command, config)
+    command = message.content.lower().split(' ')
 
-    elif str(message.author) in p_users:
-        com.p_user_command(message, command)
+    if message.author.id == int(os.getenv('ADMIN')):
+        if message.content.lower() == "trz shut":
+            cfg.save_p_users()
+            await message.channel.send("Shutting down :(")
+            cfg.close()
+            return
+        await message.channel.send(admin_command(message, command, cfg))
+
+    elif cfg.check_p_user(message.author.id):
+        await message.channel.send(p_user_command(message, command))
 
     else:
-        com.user_command(message, command)
+        await message.channel.send(user_command(message, command))
 
 client.run(token)
