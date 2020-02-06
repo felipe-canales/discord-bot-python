@@ -9,7 +9,7 @@ from config import Config
 load_dotenv()
 token = os.getenv('DISCORD_TOKEN')
 client = discord.Client()
-cfg = Config(client)
+cfg = Config()
 
 
 @client.event
@@ -28,7 +28,7 @@ async def on_message(message):
         if message.content.lower() == "trz shut":
             cfg.save_p_users()
             await message.channel.send("Shutting down :(")
-            cfg.close()
+            await client.close()
             return
         await message.channel.send(admin_command(message, command, cfg))
 

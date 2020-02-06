@@ -1,7 +1,6 @@
 class Config:
-    def __init__(self, cliente):
+    def __init__(self):
         self.pu = self.load_p_users()
-        self.cliente = cliente
     
     def load_p_users(self):
         with open("configs/p_users.txt") as f:
@@ -27,6 +26,3 @@ class Config:
 
     def check_p_user(self, id):
         return id in self.pu
-
-    def close(self):
-        self.cliente.close()
