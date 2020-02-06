@@ -87,9 +87,9 @@ p_user_c = {
 }
 
 admin_c = {
-    'checkpu' : check_p_user,
-    'addpu' : add_p_user,
-    'removepu' : remove_p_user
+    'pucheck' : check_p_user,
+    'puadd' : add_p_user,
+    'puremove' : remove_p_user
 }
 
 def admin_command(message, command, config):
