@@ -64,36 +64,47 @@ def stop_server(**kwargs):
 def ping(**kwargs):
     return "Pong!"
 
+def server_status(**kwargs):
+    return "Aqui es donde verificaria si el server esta corriendo.\nSI PUDIERA HACERLO!!!"
+
+def server_bad_command(**kwargs):
+    return "Comando incorrecto para server."
+
+def help(**kwargs):
+    pass
+
 # Dicts
 
 normal_c = {
     "ping": ping,
+    "svrstatus": server_status,
+    "svrerror": server_bad_command
 }
 
-p_user_c = dict(normal_c)
-p_user_c['start'] = start_server
-p_user_c['stop'] = stop_server
+p_user_c = {
+    'svrstart': start_server,
+    'svrstop': stop_server
+}
 
-admin_c = dict(p_user_c)
-admin_c['checkpu'] = check_p_user
-admin_c['addpu'] = add_p_user
-admin_c['removepu'] = remove_p_user
-
+admin_c = {
+    'checkpu' : check_p_user,
+    'addpu' : add_p_user,
+    'removepu' : remove_p_user
+}
 
 def admin_command(message, command, config):
-    if command[1] in admin_c.keys():
-        return admin_c[command[1]](message=message, config=config)
+    if command[0] in admin_c.keys():
+        return admin_c[command[0]](message=message, config=config)
     else:
-        return "El comando no existe"
-
+        return p_user_command(message, command)
 def p_user_command(message, command):
-    if command[1] in p_user_c.keys():
-        return p_user_c[command[1]](message=message)
+    if command[0] in p_user_c.keys():
+        return p_user_c[command[0]](message=message)
     else:
-        return "El comando no existe"
+        return user_command(message, command)
 
 def user_command(message, command):
-    if command[1] in normal_c.keys():
-        return normal_c[command[1]](message=message)
+    if command[0] in normal_c.keys():
+        return normal_c[command[0]](message=message)
     else:
         return "El comando no existe"

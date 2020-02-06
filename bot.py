@@ -4,6 +4,7 @@ import discord
 from dotenv import load_dotenv
 
 from commands import admin_command, p_user_command, user_command
+from parser import parse_msg
 from config import Config
 
 load_dotenv()
@@ -22,7 +23,7 @@ async def on_message(message):
     if message.content[0:3].lower() != "trz":
         return
     
-    command = message.content.lower().split(' ')
+    command = parse_msg(message.content)
 
     if message.author.id == int(os.getenv('ADMIN')):
         if message.content.lower() == "trz shut":
