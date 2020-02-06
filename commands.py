@@ -11,11 +11,6 @@ def process_users(user_list, method):
 
 # Admin commands
 
-def shutdown(**kwargs):
-    kwargs['config'].save_p_users()
-    kwargs['message'].channel.send("Shutting down :(")
-    kwargs['config'].close()
-
 def add_p_user(**kwargs):
     l = len(kwargs['message'].mentions)
     if l == 0:
@@ -49,6 +44,9 @@ def check_p_user(**kwargs):
 
     checked = process_users(kwargs['message'].mentions,
                             kwargs['config'].check_p_user)
+    
+    if len(checked) == 0:
+        return "No hay usuarios con privilegios."
     resp = "Los siguientes usuarios tienen privilegios: {}"\
         .format(", ".join(checked))
     return resp
@@ -80,7 +78,6 @@ admin_c = dict(p_user_c)
 admin_c['checkpu'] = check_p_user
 admin_c['addpu'] = add_p_user
 admin_c['removepu'] = remove_p_user
-admin_c['shutdown'] = shutdown
 
 
 def admin_command(message, command, config):
