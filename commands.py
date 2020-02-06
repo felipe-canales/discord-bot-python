@@ -2,21 +2,21 @@ import asyncio
 
 # Aux
 
-def process_users(user_list, method):
+def process_users(users, method):
     processed = []
-    for user in user_list:
-        if method(user.id):
-            processed.append(user.name)
+    for uid in users:
+        if method(uid):
+            processed.append("<@{}>".format(uid))
     return processed
 
 # Admin commands
 
 def add_p_user(**kwargs):
-    l = len(kwargs['message'].mentions)
+    l = len(kwargs['message'])
     if l == 0:
         return "No se mencionan usuarios"
 
-    added = process_users(kwargs['message'].mentions,
+    added = process_users(kwargs['message'],
                           kwargs['config'].add_p_user)
 
     resp = "Se ha dado privilegios a {} de {} usuarios. {}"\
@@ -25,11 +25,11 @@ def add_p_user(**kwargs):
     return resp
 
 def remove_p_user(**kwargs):
-    l = len(kwargs['message'].mentions)
+    l = len(kwargs['message'])
     if l == 0:
         return "No se mencionan usuarios"
 
-    removed = process_users(kwargs['message'].mentions,
+    removed = process_users(kwargs['message'],
                             kwargs['config'].remove_p_user)
 
     resp = "Se ha quitado privilegios a {} de {} usuarios. {}"\
@@ -38,11 +38,11 @@ def remove_p_user(**kwargs):
     return resp
 
 def check_p_user(**kwargs):
-    l = len(kwargs['message'].mentions)
+    l = len(kwargs['message'])
     if l == 0:
         return "No se mencionan usuarios"
 
-    checked = process_users(kwargs['message'].mentions,
+    checked = process_users(kwargs['message'],
                             kwargs['config'].check_p_user)
     
     if len(checked) == 0:
@@ -73,6 +73,9 @@ def server_bad_command(**kwargs):
 def help(**kwargs):
     pass
 
+def bad_syntax(**kwargs):
+    pass
+
 # Dicts
 
 normal_c = {
@@ -92,19 +95,19 @@ admin_c = {
     'puremove' : remove_p_user
 }
 
-def admin_command(message, command, config):
+def admin_command(command, config):
     if command[0] in admin_c.keys():
-        return admin_c[command[0]](message=message, config=config)
+        return admin_c[command[0]](message=command[1], config=config)
     else:
-        return p_user_command(message, command)
-def p_user_command(message, command):
+        return p_user_command(command)
+def p_user_command(command):
     if command[0] in p_user_c.keys():
-        return p_user_c[command[0]](message=message)
+        return p_user_c[command[0]](message=command[1])
     else:
-        return user_command(message, command)
+        return user_command(command)
 
-def user_command(message, command):
+def user_command(command):
     if command[0] in normal_c.keys():
-        return normal_c[command[0]](message=message)
+        return normal_c[command[0]](message=command[1])
     else:
-        return "El comando no existe"
+        return "El comando {} no existe".format(command[0])

@@ -1,8 +1,9 @@
 import re
 
-def parse_msg(msg):
-    print("-> Received {} message as command".format(msg))
+def parse_msg(msg, rawtxt):
+    print("-> Received #{}# as command".format(rawtxt))
     parts = msg.split(' ')
+    #text = rawtxt.split(' ')
     if len(parts) == 1:
         return "help", ""
     if parts[1] == "pu":
@@ -22,7 +23,7 @@ pat = r"<@\d+>"
 def parse_mentions(parts):
     ids = []
     for p in parts:
-        if re.match(pat, p):
+        if not re.match(pat, p):
             raise ValueError
         ids.append(p[2:-1])
     return ids

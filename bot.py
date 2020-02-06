@@ -23,7 +23,7 @@ async def on_message(message):
     if message.content[0:3].lower() != "trz":
         return
     
-    command = parse_msg(message.content.lower())
+    command = parse_msg(message.content.lower(), message.clean_content)
 
     if message.author.id == int(os.getenv('ADMIN')):
         if command[0] == "shut":
@@ -31,12 +31,12 @@ async def on_message(message):
             await message.channel.send("Shutting down :(")
             await client.close()
             return
-        await message.channel.send(admin_command(message, command, cfg))
+        await message.channel.send(admin_command(command, cfg))
 
     elif cfg.check_p_user(message.author.id):
-        await message.channel.send(p_user_command(message, command))
+        await message.channel.send(p_user_command(command))
 
     else:
-        await message.channel.send(user_command(message, command))
+        await message.channel.send(user_command(command))
 
 client.run(token)
