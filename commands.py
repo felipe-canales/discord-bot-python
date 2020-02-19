@@ -1,6 +1,13 @@
 import asyncio
 
+from mcserver_interface import VANILLA, FORGE, svr_online, send_command, svr_start
+
 # Aux
+
+def server_type(string):
+    if string == "vanilla": return VANILLA
+    elif string == "forge": return FORGE
+    return -1
 
 def process_users(users, method):
     processed = []
@@ -54,10 +61,18 @@ def check_p_user(**kwargs):
 # Power user commands
 
 def start_server(**kwargs):
+    svr_type = server_type(kwargs["message"])
+    if svr_online()[svr_type]:
+        return "El server ya está online."
+    svr_start(svr_type)
     return "Aqui es donde iniciaria el server.\nSI PUDIERA HACERLO!!!"
 
 def stop_server(**kwargs):
-    return "Aqui es donde pararia el server.\nSI PUDIERA HACERLO!!!"
+    svr_type = server_type(kwargs["message"])
+    if not svr_online()[svr_type]:
+        return "El server no está online."
+    send_command("stop", svr_type)
+    return "Cerrando el server."
 
 # Normal commands
 
@@ -65,13 +80,17 @@ def ping(**kwargs):
     return "Pong!"
 
 def server_status(**kwargs):
-    return "Aqui es donde verificaria si el server esta corriendo.\nSI PUDIERA HACERLO!!!"
+    msg = ["corriendo", "abajo"]
+    stt = svr_online()
+    return "El servidor vanilla está {}.\nEl servidor forge está {}."\
+        .format(msg[0] if stt[0] else msg[1], msg[0] if stt[1] else msg[1])
 
 def server_bad_command(**kwargs):
-    return "Comando incorrecto para server."
+    return "Comando incorrecto o priviliegios insuficientes."
 
 def help(**kwargs):
-    pass
+    return """
+    """
 
 def bad_syntax(**kwargs):
     pass
@@ -100,6 +119,7 @@ def admin_command(command, config):
         return admin_c[command[0]](message=command[1], config=config)
     else:
         return p_user_command(command)
+
 def p_user_command(command):
     if command[0] in p_user_c.keys():
         return p_user_c[command[0]](message=command[1])

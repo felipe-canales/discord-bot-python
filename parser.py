@@ -13,10 +13,12 @@ def parse_msg(msg, rawtxt):
         except ValueError:
             return "help", ""
     if parts[1] == "server":
-        if len(parts) != 3 or parts[2] not in ("status", "start", "stop"):
-            return "srverror", ""
-        else:
-            return "svr" + parts[2], ""
+        if (len(parts) == 3 and parts[2] == "status"):
+            return "svrstatus", ""
+        elif (len(parts) == 4 and parts[2] in ("start", "stop")\
+             and parts[3] in ("vanilla", "forge")):
+            return "svr" + parts[2], parts[3]
+        return "svrerror", ""
     return parts[1], " ".join(parts[2:])
 
 pat = r"<@\d+>"
