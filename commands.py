@@ -89,7 +89,16 @@ def server_bad_command(**kwargs):
     return "Comando incorrecto o priviliegios insuficientes."
 
 def help(**kwargs):
-    return """
+    return """Maid bot de Doc Scratch
+
+    Bot para administrar los servidores de minecraft. Comandos empiezan con \"trz \".
+    
+    Comandos disponibles:
+    
+    - help: Muestra este mensaje.
+    - server status: Indica el estado de los servidores de minecraft.
+    - server start [tipo]: Abre el servidor \"vanilla\" o \"forge\" de minecraft (Requiere privilegios).
+    - server stop [tipo]: Cierra el servidor correspondiente (Requiere privilegios).
     """
 
 def bad_syntax(**kwargs):
