@@ -65,7 +65,7 @@ def start_server(**kwargs):
     if svr_online()[svr_type]:
         return "El server ya está online."
     svr_start(svr_type)
-    return "Aqui es donde iniciaria el server.\nSI PUDIERA HACERLO!!!"
+    return "Se ha iniciado el server."
 
 def stop_server(**kwargs):
     svr_type = server_type(kwargs["message"])
