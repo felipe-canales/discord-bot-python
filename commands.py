@@ -107,6 +107,7 @@ def bad_syntax(**kwargs):
 # Dicts
 
 normal_c = {
+    "help": help,
     "ping": ping,
     "svrstatus": server_status,
     "svrerror": server_bad_command
