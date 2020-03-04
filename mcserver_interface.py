@@ -28,15 +28,13 @@ def send_command(command, svr_type):
 
 def svr_start(svr_type):
     wd = os.getcwd()
-    com = "./runserver | java -Xmx1024M -Xms1024M -XX:+UseConcMarkSweepGC -XX:+UseParNewGC -jar server.jar nogui".split(" ")
+    com = "./{} | java -Xmx1024M -Xms1024M -XX:+UseConcMarkSweepGC -XX:+UseParNewGC -jar server.jar nogui > /dev/null &"
     if svr_type == VANILLA:
         os.chdir(os.getenv("MC_SERVER_VANILLA_DIR"))
-        com[0] = "./runserver_minecraft_vanilla"
-        Popen(com)
+        Popen(com.format("runserver_minecraft_vanilla"), shell=True)
     if svr_type == FORGE:
         os.chdir(os.getenv("MC_SERVER_FORGE_DIR"))
-        com[0] = "./runserver_minecraft_forge"
-        Popen(com)
+        Popen(com.format("runserver_minecraft_forge"), shell=True)
     os.chdir(wd)
 
 if __name__ == "__main__":
