@@ -84,7 +84,7 @@ def server_status(**kwargs):
     msg = ["corriendo", "abajo"]
     stt = svr_online()
     return "El servidor vanilla está {}.\nEl servidor forge está {}.\nEl servidor bedrock está {}."\
-        .format([msg[0] if stt[i] else msg[1] for range(3)])
+        .format(*[msg[0] if stt[i] else msg[1] for i in range(3)])
 
 def server_bad_command(**kwargs):
     return "Comando incorrecto o priviliegios insuficientes."
