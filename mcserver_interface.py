@@ -5,16 +5,20 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-FORGE = 1
 VANILLA = 0
+FORGE = 1
+BEDROCK = 2
 
 def svr_online():
     comv = Popen(["pgrep", "-f", "runserver_minecraft_vanilla"],
                 stdout=PIPE)
     comf = Popen(["pgrep", "-f", "runserver_minecraft_forge"],
                 stdout=PIPE)
+    comb = Popen(["pgrep", "-f", "runserver_minecraft_bedrock"],
+                stdout=PIPE)
     return (len(comv.stdout.read()) > 0,
-            len(comf.stdout.read()) > 0)
+            len(comf.stdout.read()) > 0,
+            len(comb.stdout.read()) > 0)
 
 def send_command(command, svr_type):
     if svr_type == VANILLA:
@@ -22,6 +26,9 @@ def send_command(command, svr_type):
             pipe.write(command + "\n")
     elif svr_type == FORGE:
         with open("{}/pipe.str".format(os.getenv("MC_SERVER_FORGE_DIR")), "w") as pipe:
+            pipe.write(command + "\n")
+    elif svr_type == BEDROCK:
+        with open("{}/pipe.str".format(os.getenv("MC_SERVER_BEDROCK_DIR")), "w") as pipe:
             pipe.write(command + "\n")
     else:
         raise ValueError
@@ -35,6 +42,9 @@ def svr_start(svr_type):
     if svr_type == FORGE:
         os.chdir(os.getenv("MC_SERVER_FORGE_DIR"))
         Popen(com.format("runserver_minecraft_forge"), shell=True)
+    if svr_type == BEDROCK:
+        os.chdir(os.getenv("MC_SERVER_BEDROCK_DIR"))
+        Popen("./runserver_minecraft_bedrock | LD_LIBRARY_PATH=. ./bedrock_server > /dev/null &")
     os.chdir(wd)
 
 if __name__ == "__main__":

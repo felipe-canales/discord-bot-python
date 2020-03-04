@@ -16,7 +16,7 @@ def parse_msg(msg, rawtxt):
         if (len(parts) == 3 and parts[2] == "status"):
             return "svrstatus", ""
         elif (len(parts) == 4 and parts[2] in ("start", "stop")\
-             and parts[3] in ("vanilla", "forge")):
+             and parts[3] in ("vanilla", "forge", "bedrock")):
             return "svr" + parts[2], parts[3]
         return "svrerror", ""
     return parts[1], " ".join(parts[2:])

@@ -1,12 +1,13 @@
 import asyncio
 
-from mcserver_interface import VANILLA, FORGE, svr_online, send_command, svr_start
+from mcserver_interface import VANILLA, FORGE, BEDROCK, svr_online, send_command, svr_start
 
 # Aux
 
 def server_type(string):
     if string == "vanilla": return VANILLA
     elif string == "forge": return FORGE
+    elif string == "bedrock": return BEDROCK
     return -1
 
 def process_users(users, method):
