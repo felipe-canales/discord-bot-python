@@ -39,12 +39,14 @@ def svr_start(svr_type):
     if svr_type == VANILLA:
         os.chdir(os.getenv("MC_SERVER_VANILLA_DIR"))
         Popen(com.format("runserver_minecraft_vanilla"), shell=True)
-    if svr_type == FORGE:
+    elif svr_type == FORGE:
         os.chdir(os.getenv("MC_SERVER_FORGE_DIR"))
         Popen(com.format("runserver_minecraft_forge"), shell=True)
-    if svr_type == BEDROCK:
+    elif svr_type == BEDROCK:
         os.chdir(os.getenv("MC_SERVER_BEDROCK_DIR"))
-        Popen("./runserver_minecraft_bedrock | LD_LIBRARY_PATH=. ./bedrock_server > /dev/null &")
+        Popen("./runserver_minecraft_bedrock | LD_LIBRARY_PATH=. ./bedrock_server > /dev/null &", shell=True)
+    else:
+        raise ValueError
     os.chdir(wd)
 
 if __name__ == "__main__":

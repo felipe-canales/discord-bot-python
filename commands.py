@@ -14,7 +14,7 @@ def process_users(users, method):
     processed = []
     for uid in users:
         if method(uid):
-            processed.append("<@{}>".format(uid))
+            processed.append("<@!{}>".format(uid))
     return processed
 
 # Admin commands

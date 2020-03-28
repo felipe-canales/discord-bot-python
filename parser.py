@@ -21,11 +21,11 @@ def parse_msg(msg, rawtxt):
         return "svrerror", ""
     return parts[1], " ".join(parts[2:])
 
-pat = r"<@\d+>"
+pat = r"\<\@\!\d+\>"
 def parse_mentions(parts):
     ids = []
     for p in parts:
         if not re.match(pat, p):
             raise ValueError
-        ids.append(p[2:-1])
+        ids.append(p[3:-1])
     return ids
