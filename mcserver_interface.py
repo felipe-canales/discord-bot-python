@@ -56,7 +56,7 @@ def svr_start(svr_type):
         os.chdir(os.getenv("MC_SERVER_CREATIVE_DIR"))
         Popen(com.format("runserver_minecraft_creative"), shell=True)
     else:
-	os.chdir(wd)
+        os.chdir(wd)
         raise ValueError
     os.chdir(wd)
 
