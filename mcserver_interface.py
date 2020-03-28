@@ -6,9 +6,9 @@ from dotenv import load_dotenv
 load_dotenv()
 
 VANILLA = 0
-FORGE = 1
-BEDROCK = 2
-CREATIVE = 3
+CREATIVE = 1
+FORGE = 2
+BEDROCK = 3
 
 def svr_online():
     comv = Popen(["pgrep", "-f", "runserver_minecraft_vanilla"],
