@@ -24,7 +24,7 @@ def parse_msg(msg, rawtxt):
             return "svr" + parts[1], svrtype
         except ValueError:
             print("Incorrect start/stop command")
-            return "svrerror"
+            return "svrerror", ""
     return parts[1], " ".join(parts[2:])
 
 
