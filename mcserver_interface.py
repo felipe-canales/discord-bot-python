@@ -52,10 +52,11 @@ def svr_start(svr_type):
     elif svr_type == BEDROCK:
         os.chdir(os.getenv("MC_SERVER_BEDROCK_DIR"))
         Popen("./runserver_minecraft_bedrock | LD_LIBRARY_PATH=. ./bedrock_server > /dev/null &", shell=True)
-    if svr_type == CREATIVE:
+    elif svr_type == CREATIVE:
         os.chdir(os.getenv("MC_SERVER_CREATIVE_DIR"))
         Popen(com.format("runserver_minecraft_creative"), shell=True)
     else:
+	os.chdir(wd)
         raise ValueError
     os.chdir(wd)
 
