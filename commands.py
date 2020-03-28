@@ -81,25 +81,26 @@ def ping(**kwargs):
     return "Pong!"
 
 def server_status(**kwargs):
-    msg = ["corriendo", "abajo"]
-    stt = svr_online()
-    return "El servidor vanilla está {}.\nEl servidor forge está {}.\nEl servidor bedrock está {}."\
-        .format(*[msg[0] if stt[i] else msg[1] for i in range(3)])
+    stt = ["\u2714" if online else "\u274c" for online in svr_online()]
+    return """Estado:
+    - {} Minecraft **Vanilla** Survival 1.14
+    - {} Minecraft **Forge** Survival 1.12
+    - {} Minecraft **Bedrock** Survival""".format(*stt)
 
 def server_bad_command(**kwargs):
-    return "Comando incorrecto o priviliegios insuficientes."
+    return "El tipo de server no existe o no tiene los provilegios suficientes."
 
 def help(**kwargs):
-    return """Maid bot de Doc Scratch
+    return """**Maid bot de Doc Scratch**
 
-    Bot para administrar los servidores de minecraft. Comandos empiezan con \"trz \".
+    Bot para administrar los servidores de minecraft. Comandos empiezan con \"srv \".
     
     Comandos disponibles:
     
     - help: Muestra este mensaje.
-    - server status: Indica el estado de los servidores de minecraft.
-    - server start [tipo]: Abre el servidor \"vanilla\" o \"forge\" de minecraft (Requiere privilegios).
-    - server stop [tipo]: Cierra el servidor correspondiente (Requiere privilegios).
+    - status: Indica el estado de los servidores de minecraft.
+    - start [tipo]: Abre el servidor especificado (Requiere privilegios).
+    - stop [tipo]: Cierra el servidor especificado (Requiere privilegios).
     """
 
 def bad_syntax(**kwargs):
@@ -140,5 +141,7 @@ def p_user_command(command):
 def user_command(command):
     if command[0] in normal_c.keys():
         return normal_c[command[0]](message=command[1])
+    elif command[0][:3] == "svr":
+        return server_bad_command()
     else:
         return "El comando {} no existe".format(command[0])
