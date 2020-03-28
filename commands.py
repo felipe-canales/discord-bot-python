@@ -92,11 +92,10 @@ def server_bad_command(**kwargs):
 
 def help(**kwargs):
     return """**Maid bot de Doc Scratch**
-
-    Bot para administrar los servidores de minecraft. Comandos empiezan con \"srv \".
+    Bot para administrar los servidores de minecraft. Comandos empiezan con \"svr\".
     
-    Comandos disponibles:
-    ```help: Muestra este mensaje.
+Comandos disponibles:```
+    help: Muestra este mensaje.
     status: Indica el estado de los servidores de minecraft.
     start [tipo]: Abre el servidor especificado (Requiere privilegios).
     stop [tipo]: Cierra el servidor especificado (Requiere privilegios).```
