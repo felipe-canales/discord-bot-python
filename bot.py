@@ -20,7 +20,7 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
-    if message.content[0:3].lower() != "trz":
+    if message.content[0:3].lower() != "svr":
         return
     
     command = parse_msg(message.content.lower(), message.clean_content)
