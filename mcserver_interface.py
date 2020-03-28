@@ -8,6 +8,7 @@ load_dotenv()
 VANILLA = 0
 FORGE = 1
 BEDROCK = 2
+CREATIVE = 3
 
 def svr_online():
     comv = Popen(["pgrep", "-f", "runserver_minecraft_vanilla"],
@@ -16,7 +17,10 @@ def svr_online():
                 stdout=PIPE)
     comb = Popen(["pgrep", "-f", "runserver_minecraft_bedrock"],
                 stdout=PIPE)
+    comc = Popen(["pgrep", "-f", "runserver_minecraft_creative"],
+                stdout=PIPE)
     return (len(comv.stdout.read()) > 0,
+            len(comc.stdout.read()) > 0,
             len(comf.stdout.read()) > 0,
             len(comb.stdout.read()) > 0)
 
@@ -29,6 +33,9 @@ def send_command(command, svr_type):
             pipe.write(command + "\n")
     elif svr_type == BEDROCK:
         with open("{}/pipe.str".format(os.getenv("MC_SERVER_BEDROCK_DIR")), "w") as pipe:
+            pipe.write(command + "\n")
+    elif svr_type == CREATIVE:
+        with open("{}/pipe.str".format(os.getenv("MC_SERVER_CREATIVE_DIR")), "w") as pipe:
             pipe.write(command + "\n")
     else:
         raise ValueError
@@ -45,6 +52,9 @@ def svr_start(svr_type):
     elif svr_type == BEDROCK:
         os.chdir(os.getenv("MC_SERVER_BEDROCK_DIR"))
         Popen("./runserver_minecraft_bedrock | LD_LIBRARY_PATH=. ./bedrock_server > /dev/null &", shell=True)
+    if svr_type == CREATIVE:
+        os.chdir(os.getenv("MC_SERVER_CREATIVE_DIR"))
+        Popen(com.format("runserver_minecraft_creative"), shell=True)
     else:
         raise ValueError
     os.chdir(wd)

@@ -35,6 +35,8 @@ def get_server_type(id):
         return 'forge'
     if id in ('b', 'bedrock'):
         return 'bedrock'
+    if id in ('c', 'creative'):
+        return 'creative'
     raise ValueError
 
 

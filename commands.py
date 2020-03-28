@@ -1,6 +1,6 @@
 import asyncio
 
-from mcserver_interface import VANILLA, FORGE, BEDROCK, svr_online, send_command, svr_start
+from mcserver_interface import VANILLA, FORGE, BEDROCK, CREATIVE, svr_online, send_command, svr_start
 
 # Aux
 
@@ -8,6 +8,7 @@ def server_type(string):
     if string == "vanilla": return VANILLA
     elif string == "forge": return FORGE
     elif string == "bedrock": return BEDROCK
+    elif string == "creative": return CREATIVE
     return -1
 
 def process_users(users, method):
@@ -84,6 +85,7 @@ def server_status(**kwargs):
     stt = ["\u2714" if online else "\u274c" for online in svr_online()]
     return """Estado:
     - {} Minecraft **Vanilla** Survival 1.14
+    - {} Minecraft Vanilla **Creative** 1.14
     - {} Minecraft **Forge** Survival 1.12
     - {} Minecraft **Bedrock** Survival""".format(*stt)
 
