@@ -3,7 +3,7 @@ import os
 import discord
 from dotenv import load_dotenv
 
-from commands import admin_command, p_user_command, user_command
+from commands import process_command#, admin_command, p_user_command, user_command, 
 from parser import parse_msg
 from config import Config
 
@@ -31,12 +31,15 @@ async def on_message(message):
             await message.channel.send("Shutting down :(")
             await client.close()
             return
-        await message.channel.send(admin_command(command, cfg))
+        #await message.channel.send(admin_command(command, cfg))
+        await message.channel.send(process_command(command, cfg, 0, True))
 
-    elif cfg.check_p_user(message.author.id):
-        await message.channel.send(p_user_command(command))
-
+    #elif cfg.check_p_user(message.author.id):
+    #    await message.channel.send(p_user_command(command))#
+    #
+    #else:
+    #    await message.channel.send(user_command(command))
     else:
-        await message.channel.send(user_command(command))
+        await message.channel.send(process_command(command, cfg, str(message.author.id)))
 
 client.run(token)

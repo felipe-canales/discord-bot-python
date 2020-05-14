@@ -11,53 +11,44 @@ def server_type(string):
     elif string == "creative": return CREATIVE
     return -1
 
-def process_users(users, method):
-    processed = []
-    for uid in users:
-        if method(uid):
-            processed.append("<@!{}>".format(uid))
-    return processed
+def validate_server_permissions(svr_type, perms):
+    return 'a' in perms or\
+        (svr_type == "vanilla" and 'v' in perms) or\
+        (svr_type == "bedrock" and 'b' in perms)
+
+def validate_pu_command(auth, perms, admin):
+    return admin or ('o' not in perms) or (perms in auth)
 
 # Admin commands
 
 def add_p_user(**kwargs):
-    l = len(kwargs['message'])
-    if l == 0:
-        return "No se mencionan usuarios"
-
-    added = process_users(kwargs['message'],
-                          kwargs['config'].add_p_user)
-
-    resp = "Se ha dado privilegios a {} de {} usuarios. {}"\
-        .format(len(added), l, ", ".join(added))
-    print("Added {}".format(added))
+    receiver, permissions = kwargs['message']
+    if not validate_pu_command(kwargs['perms'], permissions, kwargs['admin']):
+        return "Permisos insuficientes."
+    if kwargs['config'].add_p_user(receiver,permissions):
+        resp = "Se ha dado privilegios a <@!{}>."\
+            .format(kwargs['message'][0])
+        print("Added {}".format(kwargs['message']))
+    else: resp = "PU ya existe."
     return resp
 
 def remove_p_user(**kwargs):
-    l = len(kwargs['message'])
-    if l == 0:
-        return "No se mencionan usuarios"
-
-    removed = process_users(kwargs['message'],
-                            kwargs['config'].remove_p_user)
-
-    resp = "Se ha quitado privilegios a {} de {} usuarios. {}"\
-        .format(len(removed), l, ", ".join(removed))
-    print("Removed {}".format(removed))
+    receiver, _ = kwargs['message']
+    permissions = kwargs['config'].get_p_user(receiver)
+    if not validate_pu_command(kwargs['perms'], permissions, kwargs['admin']):
+        return "Permisos insuficientes."
+    if kwargs['config'].remove_p_user(receiver):
+        resp = "Se ha quitado privilegios a <@!{}>."\
+            .format(kwargs['message'][0])
+        print("Removed {}".format(kwargs['message']))
+    else: resp = "PU no existe."
     return resp
 
 def check_p_user(**kwargs):
-    l = len(kwargs['message'])
-    if l == 0:
-        return "No se mencionan usuarios"
-
-    checked = process_users(kwargs['message'],
-                            kwargs['config'].check_p_user)
-    
-    if len(checked) == 0:
-        return "No hay usuarios con privilegios."
-    resp = "Los siguientes usuarios tienen privilegios: {}"\
-        .format(", ".join(checked))
+    receiver, _ = kwargs['message']
+    p = kwargs['config'].get_p_user(receiver)
+    resp = "El usuario {} tiene privilegios: {}"\
+        .format(kwargs['message'][0], p)
     return resp
 
 # Power user commands
@@ -104,7 +95,7 @@ Comandos disponibles:```
     """
 
 def bad_syntax(**kwargs):
-    pass
+    return "El comando no existe. Escribe \"svr help\" para ver los comandos disponibles."
 
 # Dicts
 
@@ -126,22 +117,40 @@ admin_c = {
     'puremove' : remove_p_user
 }
 
-def admin_command(command, config):
-    if command[0] in admin_c.keys():
-        return admin_c[command[0]](message=command[1], config=config)
-    else:
-        return p_user_command(command)
+#def admin_command(command, config):
+#    if command[0] in admin_c.keys():
+#        return admin_c[command[0]](message=command[1], config=config)
+#    else:
+#        return p_user_command(command)
+#
+#def p_user_command(command):
+#    if command[0] in p_user_c.keys():
+#        return p_user_c[command[0]](message=command[1])
+#    else:
+#        return user_command(command)
+#
+#def user_command(command):
+#    if command[0] in normal_c.keys():
+#        return normal_c[command[0]](message=command[1])
+#    elif command[0][:3] == "svr":
+#        return server_bad_command()
+#    else:
+#        return "El comando {} no existe".format(command[0])
 
-def p_user_command(command):
-    if command[0] in p_user_c.keys():
+
+def process_command(command, config, author, admin = False):
+    print("-> command: {} by {}".format(command,author))
+    # Admin level command requires 'o' flag
+    if command[0] in admin_c.keys() and\
+        (config.check_p_user(author,'o') or admin):
+        return admin_c[command[0]](message=command[1],
+                                   config=config,
+                                   perms=config.get_p_user(author).replace('o',''),
+                                   admin=admin)
+    # PU level commands requires the flag for the server
+    elif command[0] in p_user_c.keys() and\
+        (validate_server_permissions(command[1], config.get_p_user(author)) or admin):
         return p_user_c[command[0]](message=command[1])
-    else:
-        return user_command(command)
-
-def user_command(command):
-    if command[0] in normal_c.keys():
+    elif command[0] in normal_c.keys():
         return normal_c[command[0]](message=command[1])
-    elif command[0][:3] == "svr":
-        return server_bad_command()
-    else:
-        return "El comando {} no existe".format(command[0])
+    else: return bad_syntax()

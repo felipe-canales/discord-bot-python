@@ -46,3 +46,11 @@ class Config:
         for pair in self.pu:
             if pair[0] == id:
                 return perm in pair[1]
+    
+    def get_p_user(self, id):
+        if id not in self.users:
+            return ""
+        for pair in self.pu:
+            if pair[0] == id:
+                return pair[1]
+    
