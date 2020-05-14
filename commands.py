@@ -84,10 +84,10 @@ def ping(**kwargs):
 def server_status(**kwargs):
     stt = ["\u2714" if online else "\u274c" for online in svr_online()]
     return """Estado:
-    - {} Minecraft **Vanilla** Survival 1.14
-    - {} Minecraft Vanilla **Creative** 1.14
-    - {} Minecraft **Forge** Survival 1.12
-    - {} Minecraft **Bedrock** Survival""".format(*stt)
+    - {} Minecraft **Vanilla** Survival 1.14 puerto 25565
+    - {} Minecraft Vanilla **Creative** 1.14 puerto 25564
+    - {} Minecraft **Forge** Survival 1.12 puerto 25566
+    - {} Minecraft **Bedrock** Survival puerto 19132""".format(*stt)
 
 def server_bad_command(**kwargs):
     return "El tipo de server no existe o no tiene los provilegios suficientes."
