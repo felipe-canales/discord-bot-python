@@ -24,6 +24,7 @@ class Config:
     def add_p_user(self, id, perms):
         if not id in self.users:
             self.pu.append((id, perms))
+            self.users.append(id)
             return True
         return False
 
