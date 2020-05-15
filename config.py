@@ -3,7 +3,7 @@ class Config:
     # A user is a line in the format "id,perms"
     # permissions are specified with letters:
     # - a: operate all servers
-    # - v: operate vanilla server
+    # - s: operate vanilla server
     # - b: operate bedrock server
     # - o: give or take permission of other users
 

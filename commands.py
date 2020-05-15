@@ -13,7 +13,7 @@ def server_type(string):
 
 def validate_server_permissions(svr_type, perms):
     return 'a' in perms or\
-        (svr_type == "vanilla" and 'v' in perms) or\
+        (svr_type == "vanilla" and 's' in perms) or\
         (svr_type == "bedrock" and 'b' in perms)
 
 def validate_pu_command(auth, perms, admin):
