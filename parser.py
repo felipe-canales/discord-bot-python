@@ -59,17 +59,20 @@ def parse_permissions(plist):
     return perms
 
 pat = r"\<\@\!\d+\>"
-def parse_mentions(parts):
-    ids = []
-    for p in parts:
-        if not re.match(pat, p):
-            raise ValueError
-        ids.append(p[3:-1])
-    return ids
+pat2= r"\<\@\d+\>"
+#def parse_mentions(parts):
+#    ids = []
+#    for p in parts:
+#        if not re.match(pat, p):
+#            raise ValueError
+#        ids.append(p[3:-1])
+#    return ids
 
 def parse_mention(id):
     if re.match(pat, id):
         return id[3:-1]
+    if re.match(pat2, id):
+        return id[2:-1]
     raise ValueError
 
 
