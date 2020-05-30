@@ -30,6 +30,7 @@ def add_p_user(**kwargs):
             .format(kwargs['message'][0])
         print("Added {}".format(kwargs['message']))
     else: resp = "PU ya existe."
+    kwargs['config'].save_p_users()
     return resp
 
 def remove_p_user(**kwargs):
@@ -42,6 +43,7 @@ def remove_p_user(**kwargs):
             .format(kwargs['message'][0])
         print("Removed {}".format(kwargs['message']))
     else: resp = "PU no existe."
+    kwargs['config'].save_p_users()
     return resp
 
 def check_p_user(**kwargs):
