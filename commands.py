@@ -17,7 +17,7 @@ def validate_server_permissions(svr_type, perms):
         (svr_type == "bedrock" and 'b' in perms)
 
 def validate_pu_command(auth, perms, admin):
-    return admin or ('o' not in perms) or (perms in auth)
+    return admin or (('o' not in perms and 'a' not in perms) and (perms in auth))
 
 # Admin commands
 
@@ -49,8 +49,9 @@ def remove_p_user(**kwargs):
 def check_p_user(**kwargs):
     receiver, _ = kwargs['message']
     p = kwargs['config'].get_p_user(receiver)
-    resp = "El usuario {} tiene privilegios: {}"\
-        .format(kwargs['message'][0], p)
+    if len(p) > 0:
+        resp = "El usuario tiene privilegios: {}".format(p)
+    else: resp = "El usuario no tiene privilegios"
     return resp
 
 # Power user commands
@@ -77,8 +78,8 @@ def ping(**kwargs):
 def server_status(**kwargs):
     stt = ["\u2714" if online else "\u274c" for online in svr_online()]
     return """Estado:
-    - {} Minecraft **Vanilla** Survival 1.14 puerto 25565
-    - {} Minecraft Vanilla **Creative** 1.14 puerto 25564
+    - {} Minecraft **Vanilla** Survival 1.16 puerto 25565
+    - {} Minecraft Vanilla **Creative** 1.16 puerto 25564
     - {} Minecraft **Forge** Survival 1.12 puerto 25566
     - {} Minecraft **Bedrock** Survival puerto 19132""".format(*stt)
 

@@ -1,5 +1,8 @@
 discord/
+discord-old/
 .vscode/
 __pycache__
 .env
+log.txt
 configs/p_users.txt
+*.sh

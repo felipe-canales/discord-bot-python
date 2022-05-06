@@ -16,6 +16,8 @@ cfg = Config()
 @client.event
 async def on_ready():
     print(f'{client.user} has connected to Discord!')
+    #kaizen = client.get_guild(482987799398842389)
+    #await kaizen.leave()
 
 
 @client.event
