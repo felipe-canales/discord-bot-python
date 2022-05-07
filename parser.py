@@ -20,9 +20,11 @@ def parse_msg(msg, rawtxt):
             print("ALERT! Incorrect PU command")
             return "help", ""
     # Server Status
-    if (len(parts) == 2 and parts[1] == "status"):
+    if (len(parts) == 2 and parts[1] in ["status", "stt"]):
         return "svrstatus", ""
     # Server Operations
+    if (len(parts) == 2 and parts[1] in ("start", "stop")):
+        return "svr" + parts[1], 'bedrock'
     if (len(parts) == 3 and parts[1] in ("start", "stop")):
         try:
             svrtype = get_server_type(parts[2])
