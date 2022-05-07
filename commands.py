@@ -1,5 +1,4 @@
-import asyncio
-
+import strings as s
 from mcserver_interface import VANILLA, FORGE, BEDROCK, CREATIVE, svr_online, send_command, svr_start
 
 # Aux
@@ -24,12 +23,11 @@ def validate_pu_command(auth, perms, admin):
 def add_p_user(**kwargs):
     receiver, permissions = kwargs['message']
     if not validate_pu_command(kwargs['perms'], permissions, kwargs['admin']):
-        return "Permisos insuficientes."
+        return s.UNAUTHORIZED
     if kwargs['config'].add_p_user(receiver,permissions):
-        resp = "Se ha dado privilegios a <@!{}>."\
-            .format(kwargs['message'][0])
+        resp = s.PU_ADD.format(kwargs['message'][0])
         print("Added {}".format(kwargs['message']))
-    else: resp = "PU ya existe."
+    else: resp = s.PU_EXISTS
     kwargs['config'].save_p_users()
     return resp
 
@@ -37,12 +35,11 @@ def remove_p_user(**kwargs):
     receiver, _ = kwargs['message']
     permissions = kwargs['config'].get_p_user(receiver)
     if not validate_pu_command(kwargs['perms'], permissions, kwargs['admin']):
-        return "Permisos insuficientes."
+        return s.UNAUTHORIZED
     if kwargs['config'].remove_p_user(receiver):
-        resp = "Se ha quitado privilegios a <@!{}>."\
-            .format(kwargs['message'][0])
+        resp = s.PU_DEL.format(kwargs['message'][0])
         print("Removed {}".format(kwargs['message']))
-    else: resp = "PU no existe."
+    else: resp = s.PU_NOT_FOUND
     kwargs['config'].save_p_users()
     return resp
 
@@ -50,8 +47,8 @@ def check_p_user(**kwargs):
     receiver, _ = kwargs['message']
     p = kwargs['config'].get_p_user(receiver)
     if len(p) > 0:
-        resp = "El usuario tiene privilegios: {}".format(p)
-    else: resp = "El usuario no tiene privilegios"
+        resp = s.PU_LIST.format(p)
+    else: resp = s.PU_NONE
     return resp
 
 # Power user commands
@@ -59,16 +56,16 @@ def check_p_user(**kwargs):
 def start_server(**kwargs):
     svr_type = server_type(kwargs["message"])
     if svr_online()[svr_type]:
-        return "El server ya está online."
+        return s.SVR_ONLINE
     svr_start(svr_type)
-    return "Se ha iniciado el server."
+    return s.SVR_OPEN
 
 def stop_server(**kwargs):
     svr_type = server_type(kwargs["message"])
     if not svr_online()[svr_type]:
-        return "El server no está online."
+        return s.SVR_OFFLINE
     send_command("stop", svr_type)
-    return "Cerrando el server."
+    return s.SVR_CLOSE
 
 # Normal commands
 
@@ -76,29 +73,18 @@ def ping(**kwargs):
     return "Pong!"
 
 def server_status(**kwargs):
-    stt = ["\u2714" if online else "\u274c" for online in svr_online()]
-    return """Estado:
-    - {} Minecraft **Vanilla** Survival 1.16 puerto 25565
-    - {} Minecraft Vanilla **Creative** 1.16 puerto 25564
-    - {} Minecraft **Forge** Survival 1.12 puerto 25566
-    - {} Minecraft **Bedrock** Survival puerto 19132""".format(*stt)
+    status = svr_online()[BEDROCK]
+    status_string = s.PLAYERS.format(status.players_online, status.players_max) if status else "\u274c"
+    return s.STATUS.format(status_string)
 
 def server_bad_command(**kwargs):
-    return "El tipo de server no existe o no tiene los provilegios suficientes."
+    return s.BAD_COMMAND
 
 def help(**kwargs):
-    return """**Maid bot de Doc Scratch**
-    Bot para administrar los servidores de minecraft. Comandos empiezan con \"svr\".
-    
-Comandos disponibles:```
-    help: Muestra este mensaje.
-    status: Indica el estado de los servidores de minecraft.
-    start [tipo]: Abre el servidor especificado (Requiere privilegios).
-    stop [tipo]: Cierra el servidor especificado (Requiere privilegios).```
-    """
+    return s.HELP
 
 def bad_syntax(**kwargs):
-    return "El comando no existe. Escribe \"svr help\" para ver los comandos disponibles."
+    return s.NO_COMMAND
 
 # Dicts
 

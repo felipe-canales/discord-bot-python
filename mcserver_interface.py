@@ -1,6 +1,7 @@
 import os
 
 from subprocess import Popen, PIPE
+from mcstatus import BedrockServer
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -19,10 +20,11 @@ def svr_online():
                 stdout=PIPE)
     comc = Popen(["pgrep", "-f", "runserver_minecraft_creative"],
                 stdout=PIPE)
+    
     return (len(comv.stdout.read()) > 0,
             len(comc.stdout.read()) > 0,
             len(comf.stdout.read()) > 0,
-            len(comb.stdout.read()) > 0)
+            BedrockServer.lookup('localhost').status() if len(comb.stdout.read()) > 0 else False)
 
 def send_command(command, svr_type):
     if svr_type == VANILLA:
