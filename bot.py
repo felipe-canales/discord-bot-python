@@ -9,9 +9,11 @@ from config import Config
 
 load_dotenv()
 token = os.getenv('DISCORD_TOKEN')
-client = discord.Client()
-cfg = Config()
 
+intents = discord.Intents.default()
+intents.guild_messages = True
+client = discord.Client(intents=intents)
+cfg = Config()
 
 @client.event
 async def on_ready():
@@ -32,14 +34,8 @@ async def on_message(message):
             await message.channel.send("Shutting down :(")
             await client.close()
             return
-        #await message.channel.send(admin_command(command, cfg))
         await message.channel.send(process_command(command, cfg, 0, True))
 
-    #elif cfg.check_p_user(message.author.id):
-    #    await message.channel.send(p_user_command(command))#
-    #
-    #else:
-    #    await message.channel.send(user_command(command))
     else:
         await message.channel.send(process_command(command, cfg, str(message.author.id)))
 

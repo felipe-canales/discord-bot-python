@@ -106,26 +106,6 @@ admin_c = {
     'puremove' : remove_p_user
 }
 
-#def admin_command(command, config):
-#    if command[0] in admin_c.keys():
-#        return admin_c[command[0]](message=command[1], config=config)
-#    else:
-#        return p_user_command(command)
-#
-#def p_user_command(command):
-#    if command[0] in p_user_c.keys():
-#        return p_user_c[command[0]](message=command[1])
-#    else:
-#        return user_command(command)
-#
-#def user_command(command):
-#    if command[0] in normal_c.keys():
-#        return normal_c[command[0]](message=command[1])
-#    elif command[0][:3] == "svr":
-#        return server_bad_command()
-#    else:
-#        return "El comando {} no existe".format(command[0])
-
 
 def process_command(command, config, author, admin = False):
     print("-> command: {} by {}".format(command,author))
