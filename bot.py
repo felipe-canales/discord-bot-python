@@ -16,15 +16,14 @@ cfg = Config()
 @client.event
 async def on_ready():
     print(f'{client.user} has connected to Discord!')
-    #kaizen = client.get_guild(482987799398842389)
-    #await kaizen.leave()
 
 
 @client.event
 async def on_message(message):
+    print(message.content)
     if message.content[0:3].lower() != "svr":
         return
-    
+
     command = parse_msg(message.content.lower(), message.clean_content)
 
     if message.author.id == int(os.getenv('ADMIN')):
